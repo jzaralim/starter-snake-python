@@ -53,6 +53,8 @@ class Battlesnake(object):
             for square in snake['body'][:-1]:
                 bodies.add((square['x'], square['y'])
 
+        print(head)
+
         if head['x'] > 0 and (head['x']-1, head['y']) not in bodies:
             # left
             possible_moves += ["left"]
