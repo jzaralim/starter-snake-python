@@ -53,18 +53,16 @@ class Battlesnake(object):
             for square in snake['body'][:-1]:
                 bodies.add((square['x'], square['y'])
 
-        x = head['x']
-        y = head['y']
-        if x > 0 and (x-1, y) not in bodies:
+        if head['x'] > 0 and (head['x']-1, head['y']) not in bodies:
             # left
             possible_moves += ["left"]
-        if y > 0 and (x, y-1) not in bodies:
+        if head['y'] > 0 and (head['x'], head['y']-1) not in bodies:
             # up
             possible_moves += ["up"]
-        if x < board['width'] - 1 and (x+1, y) not in bodies:
+        if head['x'] < board['width'] - 1 and (head['x']+1, head['y']) not in bodies:
             # right
             possible_moves += ["right"]
-        if y < board['height'] - 1 and (x, y+1) not in bodies:
+        if head['y'] < board['height'] - 1 and (head['x'], head['y']+1) not in bodies:
             # down
             possible_moves += ["left"]
 
