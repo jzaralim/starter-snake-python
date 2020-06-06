@@ -51,9 +51,7 @@ class Battlesnake(object):
         bodies = set()
         for snake in board['snakes']:
             for square in snake['body'][:-1]:
-                bodies.add((square['x'], square['y'])
-
-        print(head)
+                bodies.add((square['x'], square['y']))
 
         if head['x'] > 0 and (head['x']-1, head['y']) not in bodies:
             # left
