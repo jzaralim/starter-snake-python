@@ -49,20 +49,22 @@ class Battlesnake(object):
         head = data['you']['head']
         board = data['board']
         bodies = {}
-        for snake in board.snakes:
-            for square in snake.body[:-1]:
-                bodies.add({square.x, square.y})
+        for snake in board['snakes']:
+            for square in snake['body'][:-1]:
+                bodies.add({square['x'], square['y']})
 
-        if head.x > 0 and {head.x-1, head.y} not in bodies:
+        x = head['x']
+        y = head['y']
+        if x > 0 and {x-1, y} not in bodies:
             # left
             possible_moves += ["left"]
-        if head.y > 0 and {head.x, head.y-1} not in bodies:
+        if y > 0 and {x, y-1} not in bodies:
             # up
             possible_moves += ["up"]
-        if head.x < board.width - 1 and {head.x+1, head.y} not in bodies:
+        if x < board['width'] - 1 and {x+1, y} not in bodies:
             # right
             possible_moves += ["right"]
-        if head.y < board.height - 1 and {head.x, head.y+1} not in bodies:
+        if y < board['height'] - 1 and {x, y+1} not in bodies:
             # down
             possible_moves += ["left"]
 
