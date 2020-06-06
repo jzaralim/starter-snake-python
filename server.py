@@ -64,7 +64,7 @@ class Battlesnake(object):
             possible_moves += ["right"]
         if head['y'] < board['height'] - 1 and (head['x'], head['y']+1) not in bodies:
             # down
-            possible_moves += ["left"]
+            possible_moves += ["down"]
 
         print(possible_moves)
         return {"move": possible_moves[0]}
