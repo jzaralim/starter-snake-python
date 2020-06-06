@@ -48,7 +48,7 @@ class Battlesnake(object):
         possible_moves = []
         head = data['you']['head']
         board = data['board']
-        bodies = {}
+        bodies = set()
         for snake in board['snakes']:
             for square in snake['body'][:-1]:
                 bodies.add({square['x'], square['y']})
