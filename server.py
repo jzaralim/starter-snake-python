@@ -19,7 +19,7 @@ class Battlesnake(object):
         return {
             "apiversion": "1",
             "author": "",  # TODO: Your Battlesnake Username
-            "color": "#888888",  # TODO: Personalize
+            "color": "#5e34eb",  # TODO: Personalize
             "head": "default",  # TODO: Personalize
             "tail": "default",  # TODO: Personalize
         }
@@ -54,17 +54,19 @@ class Battlesnake(object):
                 bodies.add((square['x'], square['y']))
 
         if head['x'] > 0 and (head['x']-1, head['y']) not in bodies:
-            # left
             possible_moves += ["left"]
         if head['y'] > 0 and (head['x'], head['y']-1) not in bodies:
-            # up
-            possible_moves += ["up"]
+            possible_moves += ["down"]
         if head['x'] < board['width'] - 1 and (head['x']+1, head['y']) not in bodies:
-            # right
             possible_moves += ["right"]
         if head['y'] < board['height'] - 1 and (head['x'], head['y']+1) not in bodies:
-            # down
-            possible_moves += ["down"]
+            possible_moves += ["up"]
+
+        # if theres a big snake approaching, take any other square
+        # if small snake, eat it
+
+        # if one is food eat it
+
 
         print(possible_moves)
         return {"move": possible_moves[0]}
