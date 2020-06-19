@@ -42,7 +42,7 @@ class Battlesnake(object):
             return "left"
         if move[1] == head["y"] + 1:
             return "down"
-        if move[2] == head["y"] - 1:
+        if move[1] == head["y"] - 1:
             return "up"
         print("what the fuck was this:", head, move)
         return ""
