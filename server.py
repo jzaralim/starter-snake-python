@@ -99,7 +99,8 @@ class Battlesnake(object):
             if move in food:
                 print("ate food")
                 return {"move": self.square_to_move(head, possible_moves[0])}
-
+        print(possible_moves)
+        print(self.square_to_move(head, possible_moves[0]))
         return {"move": self.square_to_move(head, possible_moves[0])}
 
     @cherrypy.expose
