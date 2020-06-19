@@ -48,6 +48,22 @@ class Battlesnake(object):
         print("what the fuck was this:", head, direction)
         return (0,0)
 
+    def choose_move(self, moves):
+        total = moves["left"] + moves["right"] + moves["up"] + moves["down"]
+        x = random.randint(1, total)
+        
+        if x <= moves["left"]:
+            return "left"
+        elif x <= moves["left"] + moves["right"]:
+            return "right"
+        elif x <= moves["left"] + moves["right"] + moves["up"]:
+            return "up"
+        elif x <= moves["left"] + moves["right"] + moves["up"] + moves["down"]:
+            return "down"
+        else:
+            print ("what the fuck happened here:", x, total)
+            return "left"
+
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
@@ -90,22 +106,22 @@ class Battlesnake(object):
 
             if h_x - 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 2
+                    moves["left"] = 0
                 else:
                     moves["left"] *= 2
             elif h_x + 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 2
+                    moves["right"] = 0
                 else:
                     moves["right"] *= 2
             elif h_x == s_x and h_y - 2 == s_y:
                 if s_len >= h_len:
-                    moves["down"] /= 2
+                    moves["down"] = 0
                 else:
                     moves["down"] *= 2
             elif h_x == s_x and h_y + 2 == s_y:
                 if s_len >= h_len:
-                    moves["up"] /= 2
+                    moves["up"] = 0
                 else:
                     moves["up"] *= 2
             elif h_x - 1 == s_x and h_y - 1 == s_y:
@@ -113,29 +129,29 @@ class Battlesnake(object):
                     moves["left"] /= 2
                     moves["down"] /= 2
                 else:
-                    moves["left"] /= 2
-                    moves["down"] /= 2
+                    moves["left"] *= 2
+                    moves["down"] *= 2
             elif h_x + 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
                     moves["right"] /= 2
                     moves["up"] /= 2
                 else:
-                    moves["right"] /= 2
-                    moves["up"] /= 2
+                    moves["right"] *= 2
+                    moves["up"] *= 2
             elif h_x - 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
                     moves["left"] /= 2
                     moves["up"] /= 2
                 else:
-                    moves["left"] /= 2
-                    moves["up"] /= 2
+                    moves["left"] *= 2
+                    moves["up"] *= 2
             elif h_x + 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
                     moves["right"] /= 2
                     moves["down"] /= 2
                 else:
-                    moves["right"] /= 2
-                    moves["down"] /= 2
+                    moves["right"] *= 2
+                    moves["down"] *= 2
 
         food = set()
         for square in board['food']:
@@ -144,14 +160,18 @@ class Battlesnake(object):
         # if one is food eat it
         for direction in moves:
             if self.move_to_square(head, direction) in food:
-                moves[direction] *= 1.5
+                moves[direction] *= (1 + ((100 - data['you']['health'])/50.0))
 
         # when hungry, move towards non competing food
 
-        # 
+        # SIMULATE WHEN DOWN TO LAST 2
+        # 10 plays for each possible move, 10 move lookahead, +5 win, +1 nothing, -5 lose
+        #for direction in moves:
+
         print(moves)
-        print(max(moves, key=moves.get))
-        return {"move": max(moves, key=moves.get)}
+        move = self.choose_move(moves)
+        print(move)
+        return {"move": move}
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
