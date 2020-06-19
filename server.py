@@ -35,6 +35,18 @@ class Battlesnake(object):
         print("START")
         return "ok"
 
+    def square_to_move(self, head, move):
+        if move[0] == head["x"] + 1:
+            return "right"
+        if move[0] == head["x"] - 1:
+            return "left"
+        if move[1] == head["y"] + 1:
+            return "down"
+        if move[2] == head["y"] - 1:
+            return "up"
+        print("what the fuck was this:", head, move)
+        return ""
+
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
@@ -50,26 +62,45 @@ class Battlesnake(object):
         board = data['board']
         bodies = set()
         for snake in board['snakes']:
-            for square in snake['body'][:-1]:
+            for square in snake['body'][:-1]: # no tail or other snake heads
                 bodies.add((square['x'], square['y']))
+            if len(snake['body']) < 3 or snake['health'] == 100:
+                bodies.add((snake['body'][-1]['x'], snake['body'][-1]['y']))
 
         if head['x'] > 0 and (head['x']-1, head['y']) not in bodies:
-            possible_moves += ["left"]
+            # left
+            possible_moves += [(head['x']-1, head['y'])]
         if head['y'] > 0 and (head['x'], head['y']-1) not in bodies:
-            possible_moves += ["down"]
+            # up
+            possible_moves += [(head['x'], head['y']-1)]
         if head['x'] < board['width'] - 1 and (head['x']+1, head['y']) not in bodies:
-            possible_moves += ["right"]
+            # right
+            possible_moves += [(head['x']+1, head['y'])]
         if head['y'] < board['height'] - 1 and (head['x'], head['y']+1) not in bodies:
-            possible_moves += ["up"]
+            # down
+            possible_moves += [(head['x'], head['y']+1)]
 
-        # if theres a big snake approaching, take any other square
-        # if small snake, eat it
+        """
+        for snake in board['snakes']:
+            if abs(snake['head']['x'] - head[0]) + abs(snake['head']['y'] - head[1]) == 2:
+                if snake['length'] >= data['you']['length']:
+                    # run away
+                    
+                else:
+                    # eat it
+        """
+
+        food = set()
+        for square in board['food']:
+            food.add((square['x'], square['y']))
 
         # if one is food eat it
+        for move in possible_moves:
+            if move in food:
+                print("ate food")
+                return {"move": self.square_to_move(head, possible_moves[0])}
 
-
-        print(possible_moves)
-        return {"move": possible_moves[0]}
+        return {"move": self.square_to_move(head, possible_moves[0])}
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
