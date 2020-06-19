@@ -37,9 +37,9 @@ class Battlesnake(object):
 
     def square_to_move(self, head, move):
         if move[0] == head["x"] + 1:
-            return "left"
-        if move[0] == head["x"] - 1:
             return "right"
+        if move[0] == head["x"] - 1:
+            return "left"
         if move[1] == head["y"] + 1:
             return "up"
         if move[1] == head["y"] - 1:
