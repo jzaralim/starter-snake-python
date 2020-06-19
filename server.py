@@ -79,16 +79,63 @@ class Battlesnake(object):
             moves["right"] = 100
         if head['y'] < board['height'] - 1 and (head['x'], head['y']+1) not in bodies:
             moves["up"] = 100
-        """
+
         for snake in board['snakes']:
-            if abs(snake['head']['x'] - head[0]) + abs(snake['head']['y'] - head[1]) == 2:
-                if snake['length'] >= data['you']['length']:
-                    # run away
-                    possible_moves.remo
+            s_x = snake['head']['x']
+            s_y = snake['head']['y']
+            h_x = head['x']
+            h_y = head['y']
+            s_len = snake['length']
+            h_len = data['you']['length']
+
+            if h_x - 2 == s_x and h_y == s_y:
+                if s_len >= h_len:
+                    moves["left"] /= 2
                 else:
-                    # eat it
-                    return {"move": self.square_to_move(head, )}
-        """
+                    moves["left"] *= 2
+            elif h_x + 2 == s_x and h_y == s_y:
+                if s_len >= h_len:
+                    moves["right"] /= 2
+                else:
+                    moves["right"] *= 2
+            elif h_x == s_x and h_y - 2 == s_y:
+                if s_len >= h_len:
+                    moves["down"] /= 2
+                else:
+                    moves["down"] *= 2
+            elif h_x == s_x and h_y + 2 == s_y:
+                if s_len >= h_len:
+                    moves["up"] /= 2
+                else:
+                    moves["up"] *= 2
+            elif h_x - 1 == s_x and h_y - 1 == s_y:
+                if s_len >= h_len:
+                    moves["left"] /= 2
+                    moves["down"] /= 2
+                else:
+                    moves["left"] /= 2
+                    moves["down"] /= 2
+            elif h_x + 1 == s_x and h_y + 1 == s_y:
+                if s_len >= h_len:
+                    moves["right"] /= 2
+                    moves["up"] /= 2
+                else:
+                    moves["right"] /= 2
+                    moves["up"] /= 2
+            elif h_x - 1 == s_x and h_y + 1 == s_y:
+                if s_len >= h_len:
+                    moves["left"] /= 2
+                    moves["up"] /= 2
+                else:
+                    moves["left"] /= 2
+                    moves["up"] /= 2
+            elif h_x + 1 == s_x and h_y - 1 == s_y:
+                if s_len >= h_len:
+                    moves["right"] /= 2
+                    moves["down"] /= 2
+                else:
+                    moves["right"] /= 2
+                    moves["down"] /= 2
 
         food = set()
         for square in board['food']:
@@ -99,6 +146,9 @@ class Battlesnake(object):
             if self.move_to_square(head, direction) in food:
                 moves[direction] *= 1.5
 
+        # when hungry, move towards non competing food
+
+        # 
         print(moves)
         print(max(moves, key=moves.get))
         return {"move": max(moves, key=moves.get)}
