@@ -72,7 +72,7 @@ class Battlesnake(object):
         # Valid moves are "up", "down", "left", or "right".
         # TODO: Use the information in cherrypy.request.json to decide your next move.
         data = cherrypy.request.json
-        print(data)
+        #print(data)
 
         # Choose a random direction to move in
         possible_moves = []
@@ -106,52 +106,52 @@ class Battlesnake(object):
 
             if h_x - 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 8
+                    moves["left"] /= 16.0
                 else:
-                    moves["left"] *= 4
+                    moves["left"] *= 8
             elif h_x + 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 8
+                    moves["right"] /= 16.0
                 else:
-                    moves["right"] *= 4
+                    moves["right"] *= 8
             elif h_x == s_x and h_y - 2 == s_y:
                 if s_len >= h_len:
-                    moves["down"] /= 8
+                    moves["down"] /= 16.0
                 else:
-                    moves["down"] *= 4
+                    moves["down"] *= 8
             elif h_x == s_x and h_y + 2 == s_y:
                 if s_len >= h_len:
-                    moves["up"] /= 8
+                    moves["up"] /= 16.0
                 else:
-                    moves["up"] *= 4
+                    moves["up"] *= 8
             elif h_x - 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 4
-                    moves["down"] /= 4
+                    moves["left"] /= 8.0
+                    moves["down"] /= 8.0
                 else:
-                    moves["left"] *= 2
-                    moves["down"] *= 2
+                    moves["left"] *= 4
+                    moves["down"] *= 4
             elif h_x + 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 4
-                    moves["up"] /= 4
+                    moves["right"] /= 8.0
+                    moves["up"] /= 8.0
                 else:
-                    moves["right"] *= 2
-                    moves["up"] *= 2
+                    moves["right"] *= 4
+                    moves["up"] *= 4
             elif h_x - 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 4
-                    moves["up"] /= 4
+                    moves["left"] /= 8.0
+                    moves["up"] /= 8.0
                 else:
-                    moves["left"] *= 2
-                    moves["up"] *= 2
+                    moves["left"] *= 4
+                    moves["up"] *= 4
             elif h_x + 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 4
-                    moves["down"] /= 4
+                    moves["right"] /= 8.0
+                    moves["down"] /= 8.0
                 else:
-                    moves["right"] *= 2
-                    moves["down"] *= 2
+                    moves["right"] *= 4
+                    moves["down"] *= 4
 
         food = set()
         for square in board['food']:
@@ -197,12 +197,12 @@ class Battlesnake(object):
                     score += (1 + ((100 - data['you']['health'])/50.0))/(1+floodfill[curr[0]][curr[1]])
                 else:
                     score += 1.0/(1+floodfill[curr[0]][curr[1]])
-            print(direction,score)
+            #print(direction,score)
             moves[direction] *= score
 
-        print(moves)
+        #print(moves)
         move = self.choose_move(moves)
-        print(move)
+        #print(move)
         return {"move": move}
 
     @cherrypy.expose
