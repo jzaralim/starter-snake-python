@@ -169,7 +169,7 @@ class Battlesnake(object):
         # Determine: food or tail?
 
         for direction in moves:
-            if moves["direction"] == 0:
+            if moves[direction] == 0:
                 continue
             score = 0
             floodfill = [[1000 for i in range(11)] for j in range(11)]
