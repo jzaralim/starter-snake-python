@@ -50,7 +50,7 @@ class Battlesnake(object):
 
     def choose_move(self, moves):
         total = moves["left"] + moves["right"] + moves["up"] + moves["down"]
-        x = random.randint(1, total)
+        x = random.uniform(0, total)
         
         if x <= moves["left"]:
             return "left"
@@ -106,24 +106,24 @@ class Battlesnake(object):
 
             if h_x - 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["left"] = 0
+                    moves["left"] /= 4
                 else:
-                    moves["left"] *= 2
+                    moves["left"] *= 4
             elif h_x + 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["right"] = 0
+                    moves["right"] /= 4
                 else:
-                    moves["right"] *= 2
+                    moves["right"] *= 4
             elif h_x == s_x and h_y - 2 == s_y:
                 if s_len >= h_len:
-                    moves["down"] = 0
+                    moves["down"] /= 4
                 else:
-                    moves["down"] *= 2
+                    moves["down"] *= 4
             elif h_x == s_x and h_y + 2 == s_y:
                 if s_len >= h_len:
-                    moves["up"] = 0
+                    moves["up"] /= 4
                 else:
-                    moves["up"] *= 2
+                    moves["up"] *= 4
             elif h_x - 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
                     moves["left"] /= 2
@@ -164,9 +164,38 @@ class Battlesnake(object):
 
         # when hungry, move towards non competing food
 
-        # SIMULATE WHEN DOWN TO LAST 2
-        # 10 plays for each possible move, 10 move lookahead, +5 win, +1 nothing, -5 lose
-        #for direction in moves:
+        # Flood fill board
+        # Add axtra heads to other snakes to avoid collision
+        # Determine: food or tail?
+
+        for direction in moves:
+            if moves["direction"] == 0:
+                continue
+            score = 0
+            floodfill = [[1000 for i in range(11)] for j in range(11)]
+            starting_point = self.move_to_square(head, direction)
+            floodfill[starting_point[0]][starting_point[1]] = 0
+            todo = [starting_point]
+            while len(todo) >= 1:
+                curr = todo.pop(0)
+                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10:
+                    continue
+                todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
+                if curr[0] > 0:
+                    floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0] - 1][curr[1]] + 1)
+                if curr[0] < 10:
+                    floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0] + 1][curr[1]] + 1)
+                if curr[1] > 0:
+                    floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0]][curr[1] - 1] + 1)
+                if curr[1] < 10:
+                    floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0]][curr[1] + 1] + 1)
+
+                if curr in food:
+                    score += (1 + ((100 - data['you']['health'])/50.0))/(1+floodfill[curr[0]][curr[1]])
+                else:
+                    score += 1.0/(1+floodfill[curr[0]][curr[1]])
+            print(direction,score)
+            moves[direction] *= score
 
         print(moves)
         move = self.choose_move(moves)
