@@ -200,7 +200,7 @@ class Battlesnake(object):
             #print(direction,score)
             moves[direction] *= score
 
-        #print(moves)
+        print(moves)
         move = self.choose_move(moves)
         #print(move)
         return {"move": move}
