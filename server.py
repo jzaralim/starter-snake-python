@@ -185,7 +185,8 @@ class Battlesnake(object):
                         if abs(curr[0] - snake['head']['x']) + abs(curr[1] - snake['head']['y']) <= 2:
                             score -= 2.0/(1+floodfill[curr[0]][curr[1]])
                     else:
-                        score += 0.5/(1+floodfill[curr[0]][curr[1]])
+                        if abs(curr[0] - snake['head']['x']) + abs(curr[1] - snake['head']['y']) <= 2:
+                            score += 0.5/(1+floodfill[curr[0]][curr[1]])
 
                 if curr in food:
                     score += (1.0 + ((100 - data['you']['health'])/50.0))/(1+floodfill[curr[0]][curr[1]])
@@ -193,7 +194,7 @@ class Battlesnake(object):
                     score += 1.0/(1+floodfill[curr[0]][curr[1]])
             moves[direction] *= score
 
-        print(moves)
+        print(data['game']['turn'], moves)
         return {"move": max(moves, key=moves.get)}
 
     @cherrypy.expose
