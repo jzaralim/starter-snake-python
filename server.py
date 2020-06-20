@@ -194,7 +194,7 @@ class Battlesnake(object):
                     score += 1.0/(1+floodfill[curr[0]][curr[1]])
             moves[direction] *= score
 
-        print(data['game']['turn'], moves)
+        print(data['turn'], moves)
         return {"move": max(moves, key=moves.get)}
 
     @cherrypy.expose
