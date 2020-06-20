@@ -51,8 +51,7 @@ class Battlesnake(object):
     def choose_move(self, moves):
         total = moves["left"] + moves["right"] + moves["up"] + moves["down"]
         x = random.uniform(0, total)
-        print(x)
-        
+
         if x <= moves["left"]:
             return "left"
         elif x <= moves["left"] + moves["right"]:
@@ -173,28 +172,25 @@ class Battlesnake(object):
             if moves[direction] == 0:
                 continue
             score = 0
-            floodfill = [[1000 for i in range(11)] for j in range(11)]
+            floodfill = [[1000 for i in range(board['height'])] for j in range(board['width'])]
             starting_point = self.move_to_square((head['x'], head['y']), direction)
             floodfill[starting_point[0]][starting_point[1]] = 0
             todo = [starting_point]
             while len(todo) >= 1:
                 curr = todo.pop(0)
-                if floodfill[curr[0]][curr[1]] == 0:
-                    todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
+                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10 or (floodfill[curr[0]][curr[1]] != 1000 and floodfill[curr[0]][curr[1]] != 0):
                     continue
-
-                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10 or floodfill[curr[0]][curr[1]] != 1000:
-                    continue
-
                 todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
+                if floodfill[curr[0]][curr[1]] == 0:
+                    continue
 
                 if curr[0] > 0:
                     floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0] - 1][curr[1]] + 1)
-                if curr[0] < 10:
+                if curr[0] < board['width'] - 1:
                     floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0] + 1][curr[1]] + 1)
                 if curr[1] > 0:
                     floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0]][curr[1] - 1] + 1)
-                if curr[1] < 10:
+                if curr[1] < board['height'] - 1:
                     floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0]][curr[1] + 1] + 1)
 
                 if curr in food:
