@@ -201,9 +201,9 @@ class Battlesnake(object):
             moves[direction] *= score
 
         print(moves)
-        move = self.choose_move(moves)
+        #move = self.choose_move(moves)
         #print(move)
-        return {"move": move}
+        return {"move": max(moves, key=moves.get)}
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
