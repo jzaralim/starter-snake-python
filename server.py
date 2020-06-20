@@ -48,22 +48,6 @@ class Battlesnake(object):
         print("what the fuck was this:", head, direction)
         return (0,0)
 
-    def choose_move(self, moves):
-        total = moves["left"] + moves["right"] + moves["up"] + moves["down"]
-        x = random.uniform(0, total)
-
-        if x <= moves["left"]:
-            return "left"
-        elif x <= moves["left"] + moves["right"]:
-            return "right"
-        elif x <= moves["left"] + moves["right"] + moves["up"]:
-            return "up"
-        elif x <= moves["left"] + moves["right"] + moves["up"] + moves["down"]:
-            return "down"
-        else:
-            print ("what the fuck happened here:", x, total)
-            return "left"
-
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
@@ -182,6 +166,7 @@ class Battlesnake(object):
                     continue
                 todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
                 if floodfill[curr[0]][curr[1]] == 0:
+                    score += 0.01
                     continue
 
                 if curr[0] > 0:
@@ -193,16 +178,22 @@ class Battlesnake(object):
                 if curr[1] < board['height'] - 1:
                     floodfill[curr[0]][curr[1]] = min(floodfill[curr[0]][curr[1]], floodfill[curr[0]][curr[1] + 1] + 1)
 
+                for snake in board['snakes']:
+                    if snake["id"] == data['you']["id"]:
+                        continue
+                    if snake["length"] >= data['you']["length"]:
+                        if abs(curr[0] - snake['head']['x']) + abs(curr[1] - snake['head']['y']) <= 2:
+                            score -= 2.0/(1+floodfill[curr[0]][curr[1]])
+                    else:
+                        score += 0.5/(1+floodfill[curr[0]][curr[1]])
+
                 if curr in food:
-                    score += (1 + ((100 - data['you']['health'])/50.0))/(1+floodfill[curr[0]][curr[1]])
+                    score += (1.0 + ((100 - data['you']['health'])/50.0))/(1+floodfill[curr[0]][curr[1]])
                 else:
                     score += 1.0/(1+floodfill[curr[0]][curr[1]])
-            #print(direction,score)
             moves[direction] *= score
 
         print(moves)
-        #move = self.choose_move(moves)
-        #print(move)
         return {"move": max(moves, key=moves.get)}
 
     @cherrypy.expose
