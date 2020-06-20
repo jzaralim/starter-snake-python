@@ -108,50 +108,50 @@ class Battlesnake(object):
                 if s_len >= h_len:
                     moves["left"] /= 16.0
                 else:
-                    moves["left"] *= 8
+                    moves["left"] *= 4
             elif h_x + 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
                     moves["right"] /= 16.0
                 else:
-                    moves["right"] *= 8
+                    moves["right"] *= 4
             elif h_x == s_x and h_y - 2 == s_y:
                 if s_len >= h_len:
                     moves["down"] /= 16.0
                 else:
-                    moves["down"] *= 8
+                    moves["down"] *= 4
             elif h_x == s_x and h_y + 2 == s_y:
                 if s_len >= h_len:
                     moves["up"] /= 16.0
                 else:
-                    moves["up"] *= 8
+                    moves["up"] *= 4
             elif h_x - 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
                     moves["left"] /= 8.0
                     moves["down"] /= 8.0
                 else:
-                    moves["left"] *= 4
-                    moves["down"] *= 4
+                    moves["left"] *= 2
+                    moves["down"] *= 2
             elif h_x + 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
                     moves["right"] /= 8.0
                     moves["up"] /= 8.0
                 else:
-                    moves["right"] *= 4
-                    moves["up"] *= 4
+                    moves["right"] *= 2
+                    moves["up"] *= 2
             elif h_x - 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
                     moves["left"] /= 8.0
                     moves["up"] /= 8.0
                 else:
-                    moves["left"] *= 4
-                    moves["up"] *= 4
+                    moves["left"] *= 2
+                    moves["up"] *= 2
             elif h_x + 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
                     moves["right"] /= 8.0
                     moves["down"] /= 8.0
                 else:
-                    moves["right"] *= 4
-                    moves["down"] *= 4
+                    moves["right"] *= 2
+                    moves["down"] *= 2
 
         food = set()
         for square in board['food']:
