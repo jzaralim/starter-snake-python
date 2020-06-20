@@ -178,7 +178,7 @@ class Battlesnake(object):
             todo = [starting_point]
             while len(todo) >= 1:
                 curr = todo.pop(0)
-                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10 or (floodfill[curr[0]][curr[1]] != 1000 and floodfill[curr[0]][curr[1]] != 0):
+                if curr in bodies or curr[0] < 0 or curr[0] > board['width'] - 1 or curr[1] < 0 or curr[1] > board['height'] - 1 or (floodfill[curr[0]][curr[1]] != 1000 and floodfill[curr[0]][curr[1]] != 0):
                     continue
                 todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
                 if floodfill[curr[0]][curr[1]] == 0:
