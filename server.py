@@ -37,13 +37,13 @@ class Battlesnake(object):
 
     def move_to_square(self, head, direction):
         if direction == "right":
-            return (head["x"] + 1, head["y"])
+            return (head[0] + 1, head[1])
         if direction == "left":
-            return (head["x"] - 1, head["y"])
+            return (head[0] - 1, head[1])
         if direction == "up":
-            return (head["x"], head["y"] + 1)
+            return (head[0], head[1] + 1)
         if direction == "down":
-            return (head["x"], head["y"] - 1)
+            return (head[0], head[1] - 1)
 
         print("what the fuck was this:", head, direction)
         return (0,0)
@@ -159,7 +159,7 @@ class Battlesnake(object):
 
         # if one is food eat it
         for direction in moves:
-            if self.move_to_square(head, direction) in food:
+            if self.move_to_square((head['x'], head['y']), direction) in food:
                 moves[direction] *= (1 + ((100 - data['you']['health'])/50.0))
 
         # when hungry, move towards non competing food
@@ -173,12 +173,12 @@ class Battlesnake(object):
                 continue
             score = 0
             floodfill = [[1000 for i in range(11)] for j in range(11)]
-            starting_point = self.move_to_square(head, direction)
+            starting_point = self.move_to_square((head['x'], head['y']), direction)
             floodfill[starting_point[0]][starting_point[1]] = 0
             todo = [starting_point]
             while len(todo) >= 1:
                 curr = todo.pop(0)
-                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10:
+                if curr in bodies or curr[0] < 0 or curr[0] > 10 or curr[1] < 0 or curr[1] > 10 or (floodfill[curr[0]][curr[1]] != 1000 and floodfill[curr[0]][curr[1]] != 0):
                     continue
                 todo += [self.move_to_square(curr, "left"), self.move_to_square(curr, "right"), self.move_to_square(curr, "up"), self.move_to_square(curr, "down")]
                 if curr[0] > 0:
