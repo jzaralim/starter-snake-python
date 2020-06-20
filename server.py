@@ -51,6 +51,7 @@ class Battlesnake(object):
     def choose_move(self, moves):
         total = moves["left"] + moves["right"] + moves["up"] + moves["down"]
         x = random.uniform(0, total)
+        print(x)
         
         if x <= moves["left"]:
             return "left"
@@ -106,49 +107,49 @@ class Battlesnake(object):
 
             if h_x - 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 4
+                    moves["left"] /= 8
                 else:
                     moves["left"] *= 4
             elif h_x + 2 == s_x and h_y == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 4
+                    moves["right"] /= 8
                 else:
                     moves["right"] *= 4
             elif h_x == s_x and h_y - 2 == s_y:
                 if s_len >= h_len:
-                    moves["down"] /= 4
+                    moves["down"] /= 8
                 else:
                     moves["down"] *= 4
             elif h_x == s_x and h_y + 2 == s_y:
                 if s_len >= h_len:
-                    moves["up"] /= 4
+                    moves["up"] /= 8
                 else:
                     moves["up"] *= 4
             elif h_x - 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 2
-                    moves["down"] /= 2
+                    moves["left"] /= 4
+                    moves["down"] /= 4
                 else:
                     moves["left"] *= 2
                     moves["down"] *= 2
             elif h_x + 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 2
-                    moves["up"] /= 2
+                    moves["right"] /= 4
+                    moves["up"] /= 4
                 else:
                     moves["right"] *= 2
                     moves["up"] *= 2
             elif h_x - 1 == s_x and h_y + 1 == s_y:
                 if s_len >= h_len:
-                    moves["left"] /= 2
-                    moves["up"] /= 2
+                    moves["left"] /= 4
+                    moves["up"] /= 4
                 else:
                     moves["left"] *= 2
                     moves["up"] *= 2
             elif h_x + 1 == s_x and h_y - 1 == s_y:
                 if s_len >= h_len:
-                    moves["right"] /= 2
-                    moves["down"] /= 2
+                    moves["right"] /= 4
+                    moves["down"] /= 4
                 else:
                     moves["right"] *= 2
                     moves["down"] *= 2
